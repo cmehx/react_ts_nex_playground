@@ -1,10 +1,9 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { LoginForm } from '@/components/forms'
+import { ToastProvider } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { ToastProvider } from '@/components/ui/use-toast'
-import { LoginForm } from '@/components/forms'
 
 export default function SignInPage() {
     const router = useRouter()

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { TwoFactorUtils } from '@/lib/auth-utils'
 import { prisma } from '@/lib/prisma'
+import { NextResponse } from 'next/server'
 
 export async function POST(_request: Request) {
     try {
