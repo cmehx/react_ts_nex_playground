@@ -5,11 +5,13 @@ Un blog moderne et professionnel conçu avec Next.js 15, TypeScript, et Tailwind
 ## 🚀 Démarrage rapide
 
 ### Prérequis
+
 - **Node.js** 18.0.0 ou plus récent
 - **npm** ou **yarn**
 - **PostgreSQL** (pour la base de données)
 
 ### Installation
+
 ```bash
 # 1. Cloner le projet
 git clone <url-du-repo>
@@ -36,6 +38,7 @@ L'application sera accessible sur `http://localhost:3000`
 ## 🏗️ Architecture du Projet
 
 ### Vue d'ensemble
+
 Ce projet utilise une architecture moderne basée sur **Next.js App Router** avec une séparation claire des responsabilités. Chaque dossier a un rôle spécifique pour maintenir un code organisé et scalable.
 
 ```
@@ -60,6 +63,7 @@ blog/
 ## 📂 Structure détaillée des dossiers
 
 ### `/src/app/` - Routes et Pages
+
 Utilise le **App Router** de Next.js (version 13+) pour un routage basé sur les fichiers.
 
 ```
@@ -79,12 +83,14 @@ app/
 ```
 
 **💡 Bonnes pratiques :**
+
 - `layout.tsx` : Définit la structure commune (navigation, footer)
 - `page.tsx` : Contenu principal de chaque route
 - `loading.tsx` : État de chargement automatique
 - `error.tsx` : Gestion d'erreurs personnalisée
 
 ### `/src/components/` - Composants réutilisables
+
 Organisation hiérarchique du plus générique au plus spécifique.
 
 ```
@@ -107,6 +113,7 @@ components/
 ```
 
 **💡 Convention d'import :**
+
 ```typescript
 // ✅ Propre grâce aux barrel exports
 import { Button, Card, Modal } from '@/components'
@@ -116,6 +123,7 @@ import Button from '@/components/ui/button'
 ```
 
 ### `/src/hooks/` - Hooks personnalisés
+
 Logique réutilisable encapsulée dans des hooks React.
 
 ```typescript
@@ -125,7 +133,7 @@ import { useNavigation, useLocalStorage } from '@/hooks'
 function MyComponent() {
   const { navigate } = useNavigation()
   const [theme, setTheme] = useLocalStorage('theme', 'light')
-  
+
   return (
     <button onClick={() => navigate('/dashboard')}>
       Dashboard
@@ -135,6 +143,7 @@ function MyComponent() {
 ```
 
 ### `/src/lib/` - Configurations et clients
+
 Configurations des services externes et clients.
 
 ```
@@ -146,12 +155,14 @@ lib/
 ```
 
 **💡 Utilisation :**
+
 ```typescript
 import { prisma } from '@/lib/prisma'
 import { loginSchema } from '@/lib/validations'
 ```
 
 ### `/src/utils/` - Fonctions utilitaires
+
 Fonctions pures sans dépendances React.
 
 ```typescript
@@ -159,11 +170,12 @@ import { formatDate, generateSlug, cn } from '@/utils'
 
 // Exemples d'usage
 const formattedDate = formatDate(new Date()) // "6 août 2025"
-const slug = generateSlug("Mon Super Article") // "mon-super-article"
-const className = cn("btn", { "btn-primary": isPrimary }) // Classes conditionnelles
+const slug = generateSlug('Mon Super Article') // "mon-super-article"
+const className = cn('btn', { 'btn-primary': isPrimary }) // Classes conditionnelles
 ```
 
 ### `/src/constants/` - Constantes
+
 Configuration centralisée de l'application.
 
 ```typescript
@@ -175,6 +187,7 @@ router.push(APP_ROUTES.POST_DETAIL('mon-article'))
 ```
 
 ### `/src/types/` - Types TypeScript
+
 Types réutilisables dans toute l'application.
 
 ```typescript
@@ -189,6 +202,7 @@ async function createPost(data: CreatePostData): Promise<ApiResponse<Post>> {
 ## 🎨 Système de Design
 
 ### Composants UI de base
+
 Chaque composant UI suit le pattern **compound components** avec des variants :
 
 ```typescript
@@ -205,6 +219,7 @@ Chaque composant UI suit le pattern **compound components** avec des variants :
 ```
 
 ### Tailwind CSS et Classes utilitaires
+
 Utilisation de l'utilitaire `cn()` pour combiner les classes :
 
 ```typescript
@@ -229,6 +244,7 @@ function MyComponent({ className, variant }) {
 ## 🗄️ Gestion des données
 
 ### Base de données (Prisma)
+
 ```typescript
 // Définition du modèle dans prisma/schema.prisma
 model Post {
@@ -250,6 +266,7 @@ const posts = await prisma.post.findMany({
 ```
 
 ### État côté client (React Query)
+
 ```typescript
 import { useQuery, useMutation } from '@tanstack/react-query'
 
@@ -267,6 +284,7 @@ function PostsList() {
 ## 🧪 Tests et Qualité
 
 ### Scripts disponibles
+
 ```bash
 # Tests
 npm run test              # Lance les tests
@@ -287,6 +305,7 @@ npm run db:studio         # Interface graphique de la DB
 ```
 
 ### Structure des tests
+
 ```
 src/
 ├── app/
@@ -301,6 +320,7 @@ src/
 ## 🔧 Workflow de développement
 
 ### 1. Créer une nouvelle fonctionnalité
+
 ```bash
 # 1. Créer une branche
 git checkout -b feature/nom-de-la-feature
@@ -318,6 +338,7 @@ git commit -m "feat: ajouter nouvelle fonctionnalité"
 ```
 
 ### 2. Ajouter un nouveau composant UI
+
 ```typescript
 // 1. Créer le composant dans /src/components/ui/
 // 2. L'exporter dans /src/components/ui/index.ts
@@ -328,6 +349,7 @@ import { MonComposant } from '@/components'
 ```
 
 ### 3. Ajouter une nouvelle page
+
 ```typescript
 // 1. Créer /src/app/ma-page/page.tsx
 export default function MaPage() {
@@ -337,9 +359,108 @@ export default function MaPage() {
 // 2. Optionnel : Ajouter layout.tsx, loading.tsx, error.tsx
 ```
 
-## 🌐 Déploiement
+## 🌐 Déploiement et CI/CD
+
+### Pipeline CI/CD automatisé
+
+Le projet utilise **GitHub Actions** pour un pipeline CI/CD complet qui s'exécute automatiquement :
+
+#### **🔄 Déclencheurs**
+
+- **Push** sur les branches `main` et `develop`
+- **Pull Requests** vers `main`
+
+#### **🧪 Étapes de validation (automatiques)**
+
+```yaml
+✅ Tests multi-versions (Node.js 18 & 20)
+✅ Linting (ESLint avec auto-fix)
+✅ Formatage (Prettier check)
+✅ Audit sécurité (npm audit)
+✅ Type checking (TypeScript)
+✅ Tests avec coverage (Jest)
+✅ Build application (Next.js)
+✅ Upload coverage (Codecov)
+```
+
+#### **🚀 Déploiement automatique**
+
+- **Production** : Déclenchée uniquement sur push vers `main`
+- **Prêt pour** : Vercel, Railway, AWS, etc.
+
+### Configuration locale vs CI
+
+#### **Scripts de développement**
+
+```bash
+# Développement local avec hot reload
+npm run dev
+
+# Tests en mode interactif
+npm run test:watch
+
+# Vérifications manuelles
+npm run lint
+npm run type-check
+npm run format:check
+```
+
+#### **Scripts CI/CD (automatiques)**
+
+```bash
+# Installation optimisée avec cache
+npm ci
+
+# Tests pour intégration continue
+npm run test:ci
+
+# Build de production
+npm run build
+```
+
+### Optimisations de performance CI
+
+#### **Cache intelligent**
+
+- **Dependencies** : `node_modules` mis en cache par clé de `package-lock.json`
+- **Next.js builds** : Cache `.next/cache` pour builds plus rapides
+- **Restoration** : Cache restauré même si version exacte non trouvée
+
+#### **Tests parallèles**
+
+```yaml
+strategy:
+  matrix:
+    node-version: [18, 20]
+```
+
+Les tests s'exécutent simultanément sur Node.js 18 et 20 pour garantir la compatibilité.
+
+#### **Base de données test**
+
+- **PostgreSQL 15** automatiquement provisionnée
+- **Migrations** appliquées à chaque run
+- **Données isolées** pour chaque test
+
+### Protection des branches
+
+#### **Règles automatiques**
+
+- ❌ **Bloque les PR** si tests échouent
+- ❌ **Bloque les PR** si linting échoue
+- ❌ **Bloque les PR** si types TypeScript incorrects
+- ❌ **Bloque les PR** si vulnérabilités de sécurité high/critical
+- ❌ **Bloque les PR** si build de production échoue
+
+#### **Hook pre-commit local**
+
+```bash
+# Avant chaque commit local, exécution automatique :
+npx lint-staged  # Lint + format uniquement les fichiers modifiés
+```
 
 ### Variables d'environnement
+
 ```bash
 # .env (local)
 DATABASE_URL="postgresql://..."
@@ -348,8 +469,180 @@ NEXTAUTH_URL="http://localhost:3000"
 
 # .env.production (production)
 DATABASE_URL="postgresql://prod..."
-NEXTAUTH_URL="https://monblog.com"
+NEXTAUTH_SECRET="..."
+NEXTAUTH_URL="https://monsite.com"
 ```
+
+### Monitoring et debugging CI
+
+#### **Logs détaillés**
+
+- **GitHub Actions** : Interface web pour voir tous les logs en temps réel
+- **Coverage reports** : Uploadés automatiquement vers Codecov
+- **Performance** : Temps d'exécution trackés pour optimiser
+
+#### **Notifications**
+
+- **Email** : Notification automatique si pipeline échoue
+- **Slack/Discord** : Intégration possible pour notifier l'équipe
+- **Status badges** : Affichage du statut dans le README
+
+### Déploiement vers différentes plateformes
+
+#### **Vercel (recommandé pour Next.js)**
+
+```bash
+# 1. Connecter le repository GitHub à Vercel
+# 2. Configurer les variables d'environnement
+# 3. Déploiement automatique sur chaque push main
+
+# Variables Vercel requises :
+DATABASE_URL=postgresql://...
+NEXTAUTH_SECRET=...
+NEXTAUTH_URL=https://votre-app.vercel.app
+```
+
+#### **Railway**
+
+```bash
+# 1. Connecter le repository
+# 2. Railway détecte automatiquement Next.js
+# 3. PostgreSQL intégré disponible
+
+# Commandes Railway
+railway login
+railway link
+railway deploy
+```
+
+#### **Docker (production)**
+
+```bash
+# Build et déploiement avec Docker
+npm run docker:prod
+
+# Ou manuellement
+docker build -t blog-app .
+docker run -p 3000:3000 blog-app
+```
+
+## 🔧 Troubleshooting
+
+### Problèmes courants CI/CD
+
+#### **Tests qui échouent en CI mais passent localement**
+
+```bash
+# Problème : Différence d'environnement
+# Solution : Reproduire l'environnement CI
+export NODE_ENV=test
+npm run test:ci
+
+# Vérifier les variables d'environnement
+echo $DATABASE_URL
+```
+
+#### **Build Next.js qui échoue**
+
+```bash
+# Problème courant : Variables d'environnement manquantes
+# Solution : Vérifier les secrets GitHub
+Settings → Secrets and variables → Actions
+
+# Variables requises :
+DATABASE_URL
+NEXTAUTH_SECRET
+```
+
+#### **Hook pre-commit trop lent**
+
+```bash
+# Problème : lint-staged traite trop de fichiers
+# Solution : Optimiser la configuration dans package.json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix --max-warnings=0"],
+    "*.{json,md}": ["prettier --write"]
+  }
+}
+```
+
+#### **Erreurs TypeScript uniquement en CI**
+
+```bash
+# Problème : Versions différentes ou cache
+# Solution : Forcer la régénération
+npm run type-check
+npx tsc --noEmit --incremental false
+```
+
+### Performance et optimisation
+
+#### **Réduire le temps de CI**
+
+```yaml
+# Utiliser des caches agressifs
+- uses: actions/cache@v3
+  with:
+    path: |
+      ~/.npm
+      .next/cache
+    key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+
+# Tests parallèles par catégorie
+npm run test:unit & npm run test:integration
+```
+
+#### **Optimisation des builds**
+
+```bash
+# Variables pour optimiser Next.js
+NEXT_TELEMETRY_DISABLED=1
+ANALYZE=false
+
+# Build avec optimisations
+npm run build
+```
+
+### Debugging local vs CI
+
+#### **Reproduire l'environnement CI localement**
+
+```bash
+# 1. Utiliser les mêmes versions Node.js
+nvm use 20
+
+# 2. Installer avec npm ci (pas npm install)
+rm -rf node_modules package-lock.json
+npm ci
+
+# 3. Utiliser les mêmes variables d'environnement
+cp .env.test .env.local
+
+# 4. Lancer les tests comme en CI
+npm run test:ci
+```
+
+## 📊 Monitoring et métriques
+
+### Coverage automatique
+
+```bash
+# Après chaque push, coverage uploadé vers Codecov
+# Badge disponible pour le README :
+[![codecov](https://codecov.io/gh/username/repo/branch/main/graph/badge.svg)](https://codecov.io/gh/username/repo)
+```
+
+### Performance tracking
+
+- **Bundle analyzer** : Analyse automatique de la taille des bundles
+- **Lighthouse CI** : Scores de performance automatiques
+- **Load testing** : Tests de charge pour les API endpoints
+
+Votre pipeline CI/CD est maintenant **enterprise-grade** et prêt pour la production ! 🚀
+NEXTAUTH_URL="https://monblog.com"
+
+````
 
 ### Scripts de déploiement
 ```bash
@@ -364,24 +657,26 @@ npm run docker:dev
 
 # Docker (production)
 npm run docker:prod
-```
+````
 
 ## 📚 Ressources et conventions
 
 ### Conventions de nommage
+
 - **Fichiers** : `kebab-case` (exemple: `user-profile.tsx`)
 - **Composants** : `PascalCase` (exemple: `UserProfile`)
 - **Variables/fonctions** : `camelCase` (exemple: `getUserProfile`)
 - **Constants** : `UPPER_SNAKE_CASE` (exemple: `API_BASE_URL`)
 
 ### Imports et exports
+
 ```typescript
 // ✅ Imports organisés
-import React from 'react'           // Externe
-import { NextPage } from 'next'     // Framework
+import React from 'react' // Externe
+import { NextPage } from 'next' // Framework
 import { Button } from '@/components' // Interne
-import { formatDate } from '@/utils'  // Utilitaires
-import type { User } from '@/types'   // Types
+import { formatDate } from '@/utils' // Utilitaires
+import type { User } from '@/types' // Types
 
 // ✅ Exports nommés pour les utilitaires
 export const formatDate = () => {}
@@ -392,6 +687,7 @@ export default function MyComponent() {}
 ```
 
 ### Git et commits
+
 ```bash
 # Convention Conventional Commits
 feat: ajouter authentification Google
@@ -404,12 +700,14 @@ test: ajouter tests pour Button
 ## 🆘 Dépannage courant
 
 ### Erreurs fréquentes
+
 1. **Import non trouvé** : Vérifier les barrel exports dans `index.ts`
 2. **Erreur Prisma** : Lancer `npm run db:generate`
 3. **Erreur TypeScript** : Vérifier les types dans `/src/types/`
 4. **Erreur de build** : Nettoyer `.next/` puis `npm run build`
 
 ### Commandes utiles
+
 ```bash
 # Nettoyer et réinstaller
 rm -rf node_modules .next

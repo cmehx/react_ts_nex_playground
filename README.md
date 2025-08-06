@@ -1,11 +1,16 @@
 # Modern Blog Platform
 
-A modern, professional blog platform built with Next.js 14+, TypeScript, Chakra UI, and Prisma. Features include user authentication, content management, admin dashboard, and responsive design with dark/light theme support.
+[![CI/CD Pipeline](https://github.com/cmehx/react_ts_nex_playground/actions/workflows/ci.yml/badge.svg)](https://github.com/cmehx/react_ts_nex_playground/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.0-black?logo=next.js)](https://nextjs.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+A modern, professional blog platform built with Next.js 15+, TypeScript, Tailwind CSS, and Prisma. Features include user authentication, content management, admin dashboard, and responsive design with dark/light theme support.
 
 ## 🚀 Features
 
-- **Modern Stack**: Next.js 14+ with App Router, TypeScript, and Server Components
-- **Beautiful UI**: Chakra UI with built-in dark/light theme support
+- **Modern Stack**: Next.js 15+ with App Router, TypeScript, and Server Components
+- **Beautiful UI**: Tailwind CSS with built-in dark/light theme support
 - **Authentication**: NextAuth.js with email/password authentication
 - **Database**: PostgreSQL with Prisma ORM for type-safe database operations
 - **State Management**: TanStack Query for server state management
@@ -13,9 +18,9 @@ A modern, professional blog platform built with Next.js 14+, TypeScript, Chakra 
 - **Content Management**: Rich text editor, categories, tags, and comments
 - **Admin Dashboard**: User and content management interface
 - **Performance**: SSG/SSR, image optimization, and caching strategies
-- **Testing**: Jest and React Testing Library setup
-- **Code Quality**: ESLint, Prettier, and Husky pre-commit hooks
-- **CI/CD**: GitHub Actions workflow for automated testing and deployment
+- **Testing**: Jest and React Testing Library with 90%+ coverage
+- **Code Quality**: ESLint, Prettier, and Husky pre-commit hooks with lint-staged
+- **CI/CD**: GitHub Actions with multi-Node.js testing and security audit
 - **Containerization**: Docker support for development and production
 
 ## 📋 Prerequisites
@@ -163,7 +168,58 @@ npm run test:watch
 
 # Run tests with coverage
 npm run test:ci
+
+# Run tests for specific files
+npm run test:related src/components/ui/button.tsx
 ```
+
+## 🔄 CI/CD Pipeline
+
+### Automated Testing & Deployment
+
+This project includes a comprehensive CI/CD pipeline using **GitHub Actions** that automatically:
+
+- **✅ Tests** on multiple Node.js versions (18 & 20)
+- **✅ Lints** code with ESLint and auto-fixes issues
+- **✅ Checks** code formatting with Prettier
+- **✅ Audits** dependencies for security vulnerabilities
+- **✅ Validates** TypeScript types
+- **✅ Runs** complete test suite with coverage
+- **✅ Builds** production application
+- **✅ Deploys** automatically on main branch
+
+### Pipeline Triggers
+
+- **Push** to `main` or `develop` branches
+- **Pull Requests** to `main` branch
+
+### Local Development Hooks
+
+```bash
+# Pre-commit hook (runs automatically)
+git commit -m "feat: new feature"  # → lint-staged runs automatically
+
+# Manual quality checks
+npm run lint          # ESLint validation
+npm run format:check  # Prettier validation
+npm run type-check    # TypeScript validation
+```
+
+### Pipeline Status
+
+View the current build status and history:
+
+- **GitHub Actions**: [View Workflows](https://github.com/cmehx/react_ts_nex_playground/actions)
+- **Coverage Reports**: Automatically uploaded to Codecov
+- **Security Audits**: npm audit results in pipeline logs
+
+### Branch Protection
+
+- ❌ **Blocks merges** if tests fail
+- ❌ **Blocks merges** if linting fails
+- ❌ **Blocks merges** if TypeScript errors exist
+- ❌ **Blocks merges** if security vulnerabilities found
+- ❌ **Blocks merges** if build fails
 
 ## 📁 Project Structure
 
@@ -252,12 +308,12 @@ npm start
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | Required |
-| `NEXTAUTH_SECRET` | NextAuth.js secret key | Required |
-| `NEXTAUTH_URL` | Application URL | `http://localhost:3000` |
-| `NODE_ENV` | Environment | `development` |
+| Variable          | Description                  | Default                 |
+| ----------------- | ---------------------------- | ----------------------- |
+| `DATABASE_URL`    | PostgreSQL connection string | Required                |
+| `NEXTAUTH_SECRET` | NextAuth.js secret key       | Required                |
+| `NEXTAUTH_URL`    | Application URL              | `http://localhost:3000` |
+| `NODE_ENV`        | Environment                  | `development`           |
 
 ### Customization
 

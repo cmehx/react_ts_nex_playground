@@ -5,12 +5,14 @@ Bienvenue ! Ce guide vous explique comment contribuer efficacement au projet, m�
 ## 🎯 Pour commencer
 
 ### Si vous êtes nouveau sur le projet
+
 1. **Lisez d'abord** le [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) pour comprendre l'architecture
 2. **Explorez** les [PATTERNS.md](./PATTERNS.md) pour les conventions de code
 3. **Configurez** votre environnement de développement
 4. **Commencez** par des tâches simples marquées `good-first-issue`
 
 ### Niveaux de contribution
+
 - 🟢 **Débutant** : Corrections de bugs, améliorations UI, documentation
 - 🟡 **Intermédiaire** : Nouvelles fonctionnalités, refactoring, tests
 - 🔴 **Avancé** : Architecture, performance, sécurité
@@ -18,6 +20,7 @@ Bienvenue ! Ce guide vous explique comment contribuer efficacement au projet, m�
 ## 🛠️ Configuration de l'environnement
 
 ### 1. Fork et Clone
+
 ```bash
 # 1. Fork le projet sur GitHub
 # 2. Cloner votre fork
@@ -29,6 +32,7 @@ git remote add upstream https://github.com/REPO-ORIGINAL/blog.git
 ```
 
 ### 2. Installation
+
 ```bash
 # Installer les dépendances
 npm install
@@ -48,6 +52,7 @@ npm run dev
 ### 3. Configuration de la base de données
 
 #### Option A : PostgreSQL local
+
 ```bash
 # Installer PostgreSQL
 # Windows : Télécharger depuis postgresql.org
@@ -62,6 +67,7 @@ DATABASE_URL="postgresql://username:password@localhost:5432/blog_dev"
 ```
 
 #### Option B : Base de données cloud (plus simple)
+
 ```bash
 # Utiliser Railway, Supabase, ou PlanetScale
 # Copier l'URL de connexion dans .env
@@ -69,7 +75,9 @@ DATABASE_URL="postgresql://..."
 ```
 
 ### 4. Configuration de l'éditeur (VS Code recommandé)
+
 Extensions recommandées (installées automatiquement via `.vscode/extensions.json`) :
+
 - **ESLint** : Linting en temps réel
 - **Prettier** : Formatage automatique
 - **TypeScript Hero** : Aide pour les imports
@@ -79,6 +87,7 @@ Extensions recommandées (installées automatiquement via `.vscode/extensions.js
 ## 🏃‍♂️ Workflow de développement
 
 ### 1. Avant de commencer
+
 ```bash
 # Synchroniser avec le projet principal
 git checkout main
@@ -92,6 +101,7 @@ git checkout -b fix/description-du-bug
 ```
 
 ### 2. Pendant le développement
+
 ```bash
 # Lancer le serveur de dev (avec hot reload)
 npm run dev
@@ -99,25 +109,41 @@ npm run dev
 # Dans un autre terminal, lancer les tests en mode watch
 npm run test:watch
 
-# Vérifier le code régulièrement
+# Vérifier que la CI passera (simulation locale)
 npm run lint
 npm run type-check
+npm run format:check
+npm run test:ci
 ```
 
 ### 3. Avant de commit
+
 ```bash
 # Formatter le code
 npm run format
 
-# Vérifier que tout passe
+# Vérifier que tout passe (comme en CI)
 npm run lint
 npm run type-check
 npm run test
 
-# Commit (Husky va automatiquement vérifier)
+# Commit (Husky + lint-staged vérifient automatiquement)
 git add .
 git commit -m "feat: ajouter fonction de recherche"
 ```
+
+### 4. Validation automatique CI/CD
+
+Après chaque push, la **GitHub Actions CI** vérifie automatiquement :
+
+- ✅ **Linting** : ESLint avec zéro warning
+- ✅ **Formatting** : Prettier check
+- ✅ **Security** : npm audit high/critical
+- ✅ **Types** : TypeScript strict validation
+- ✅ **Tests** : Jest avec coverage sur Node.js 18 & 20
+- ✅ **Build** : Next.js production build
+
+**❌ La PR sera bloquée** si l'une de ces étapes échoue.
 
 ## 📝 Conventions de commit
 
@@ -148,6 +174,7 @@ chore: mettre à jour dépendances
 ## 🧩 Comment ajouter...
 
 ### Une nouvelle page
+
 ```bash
 # 1. Créer le dossier dans app/
 mkdir src/app/ma-nouvelle-page
@@ -181,6 +208,7 @@ EOF
 ```
 
 ### Un nouveau composant UI
+
 ```bash
 # 1. Créer le composant
 cat > src/components/ui/mon-composant.tsx << 'EOF'
@@ -243,6 +271,7 @@ EOF
 ```
 
 ### Une nouvelle API route
+
 ```bash
 # 1. Créer le dossier
 mkdir -p src/app/api/mon-endpoint
@@ -275,7 +304,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const validatedData = requestSchema.parse(body)
-    
+
     // Logique de création
     const result = await createData(validatedData)
     return NextResponse.json(result, { status: 201 })
@@ -296,6 +325,7 @@ EOF
 ```
 
 ### Un nouveau hook personnalisé
+
 ```bash
 # 1. Créer le hook
 cat > src/hooks/use-mon-hook.ts << 'EOF'
@@ -348,11 +378,11 @@ describe('useMonHook', () => {
 
   it('updates value correctly', () => {
     const { result } = renderHook(() => useMonHook('initial'))
-    
+
     act(() => {
       result.current.setValue('new value')
     })
-    
+
     expect(result.current.value).toBe('new value')
     expect(result.current.isModified).toBe(true)
   })
@@ -363,12 +393,14 @@ EOF
 ## 🧪 Tests
 
 ### Stratégie de tests
+
 - **Unit tests** : Fonctions utilitaires, hooks
 - **Component tests** : Composants UI
 - **Integration tests** : Formulaires, workflows
 - **E2E tests** : Parcours utilisateur critiques
 
 ### Lancer les tests
+
 ```bash
 # Tous les tests
 npm run test
@@ -384,14 +416,15 @@ npm test -- button.test.tsx
 ```
 
 ### Écrire de bons tests
+
 ```typescript
 // ✅ Bon test : teste le comportement, pas l'implémentation
 it('displays error message when form is invalid', async () => {
   render(<LoginForm />)
-  
+
   const submitButton = screen.getByRole('button', { name: /login/i })
   await user.click(submitButton)
-  
+
   expect(screen.getByText(/email is required/i)).toBeInTheDocument()
 })
 
@@ -406,6 +439,7 @@ it('calls useState when component mounts', () => {
 ## 🐛 Debugging
 
 ### Outils disponibles
+
 ```bash
 # React Query Devtools
 # Accessible en dev sur localhost:3000
@@ -421,6 +455,7 @@ npm run type-check
 ```
 
 ### Logs utiles
+
 ```typescript
 // Dans les composants
 console.log('Debug state:', { user, posts, isLoading })
@@ -435,28 +470,33 @@ console.log('API Debug:', { method: request.method, body })
 ## 📋 Checklist avant Pull Request
 
 ### ✅ Code
+
 - [ ] Le code suit les conventions du projet
 - [ ] Pas de `console.log` ou `debugger` oubliés
 - [ ] Types TypeScript corrects
 - [ ] Imports organisés et optimisés
 
 ### ✅ Tests
+
 - [ ] Tests ajoutés pour les nouvelles fonctionnalités
 - [ ] Tous les tests passent (`npm run test`)
 - [ ] Coverage maintenu ou amélioré
 
 ### ✅ Qualité
+
 - [ ] Linting passe (`npm run lint`)
 - [ ] Formatage correct (`npm run format`)
 - [ ] Type checking OK (`npm run type-check`)
 - [ ] Build réussit (`npm run build`)
 
 ### ✅ Documentation
+
 - [ ] README mis à jour si nécessaire
 - [ ] Commentaires JSDoc pour fonctions complexes
 - [ ] Types documentés
 
 ### ✅ Performance
+
 - [ ] Pas de re-renders inutiles
 - [ ] Images optimisées
 - [ ] Imports lazy si approprié
@@ -464,6 +504,7 @@ console.log('API Debug:', { method: request.method, body })
 ## 🚀 Soumettre sa Pull Request
 
 ### 1. Préparation
+
 ```bash
 # Mettre à jour avec main
 git checkout main
@@ -476,6 +517,7 @@ git push origin ma-branche
 ```
 
 ### 2. Créer la PR
+
 - **Titre** : Descriptif et concis
 - **Description** : Expliquer le pourquoi et le comment
 - **Screenshots** : Pour les changements UI
@@ -483,25 +525,31 @@ git push origin ma-branche
 - **Breaking changes** : Bien les documenter
 
 ### 3. Template de PR
+
 ```markdown
 ## Description
+
 Brève description de ce qui a été changé et pourquoi.
 
 ## Type de changement
+
 - [ ] Bug fix
 - [ ] Nouvelle fonctionnalité
 - [ ] Breaking change
 - [ ] Documentation
 
 ## Tests
+
 - [ ] Tests ajoutés/mis à jour
 - [ ] Tous les tests passent
 - [ ] Tests manuels effectués
 
 ## Screenshots (si applicable)
+
 ![Avant](url) ![Après](url)
 
 ## Checklist
+
 - [ ] Code review personnel effectué
 - [ ] Auto-assigné des reviewers
 - [ ] Labels appropriés ajoutés
@@ -519,22 +567,27 @@ Brève description de ce qui a été changé et pourquoi.
 ### Si vous êtes nouveau avec...
 
 **Next.js :**
+
 - [Documentation officielle](https://nextjs.org/docs)
 - [Learn Next.js](https://nextjs.org/learn)
 
 **TypeScript :**
+
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [TypeScript avec React](https://react-typescript-cheatsheet.netlify.app/)
 
 **Tailwind CSS :**
+
 - [Documentation](https://tailwindcss.com/docs)
 - [Tailwind UI](https://tailwindui.com/) (composants payants)
 
 **Prisma :**
+
 - [Getting Started](https://www.prisma.io/docs/getting-started)
 - [Prisma Schema](https://www.prisma.io/docs/concepts/components/prisma-schema)
 
 **React Query :**
+
 - [Documentation](https://tanstack.com/query/latest)
 - [Practical React Query](https://tkdodo.eu/blog/practical-react-query)
 
