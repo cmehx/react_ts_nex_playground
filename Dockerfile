@@ -1,5 +1,5 @@
-# Development Dockerfile
-FROM node:18-alpine AS base
+# Multi-stage Dockerfile for Next.js 15 with Prisma
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm ci --only=production && npm cache clean --force
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -19,6 +19,11 @@ COPY . .
 
 # Generate Prisma client
 RUN npx prisma generate
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+ENV NEXT_TELEMETRY_DISABLED 1
 
 # Build the application
 RUN npm run build

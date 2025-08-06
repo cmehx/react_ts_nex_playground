@@ -29,8 +29,9 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {}
-    
+
     if (published !== undefined) where.published = published
     if (featured) where.featured = true
     if (authorId) where.authorId = authorId
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
     }
     if (categoryId) {
       where.categories = {
-        some: { categoryId }
+        some: { categoryId },
       }
     }
 
@@ -60,26 +61,26 @@ export async function GET(request: NextRequest) {
               name: true,
               email: true,
               image: true,
-            }
+            },
           },
           categories: {
             include: {
-              category: true
-            }
+              category: true,
+            },
           },
           tags: {
             include: {
-              tag: true
-            }
+              tag: true,
+            },
           },
           _count: {
             select: {
-              comments: true
-            }
-          }
-        }
+              comments: true,
+            },
+          },
+        },
       }),
-      prisma.post.count({ where })
+      prisma.post.count({ where }),
     ])
 
     return NextResponse.json({
@@ -88,8 +89,8 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     })
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -104,7 +105,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -113,15 +114,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { 
-      title, 
-      content, 
-      excerpt, 
-      published, 
+    const {
+      title,
+      content,
+      excerpt,
+      published,
       featured,
       coverImage,
       categoryIds = [],
-      tagIds = []
+      tagIds = [],
     } = createPostSchema.parse(body)
 
     // Generate slug from title
@@ -132,7 +133,7 @@ export async function POST(request: NextRequest) {
 
     // Check if slug already exists
     const existingPost = await prisma.post.findUnique({
-      where: { slug }
+      where: { slug },
     })
 
     if (existingPost) {
@@ -161,14 +162,14 @@ export async function POST(request: NextRequest) {
         authorId: session.user.id,
         categories: {
           create: categoryIds.map((categoryId: string) => ({
-            categoryId
-          }))
+            categoryId,
+          })),
         },
         tags: {
           create: tagIds.map((tagId: string) => ({
-            tagId
-          }))
-        }
+            tagId,
+          })),
+        },
       },
       include: {
         author: {
@@ -177,19 +178,19 @@ export async function POST(request: NextRequest) {
             name: true,
             email: true,
             image: true,
-          }
+          },
         },
         categories: {
           include: {
-            category: true
-          }
+            category: true,
+          },
         },
         tags: {
           include: {
-            tag: true
-          }
-        }
-      }
+            tag: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json(post, { status: 201 })

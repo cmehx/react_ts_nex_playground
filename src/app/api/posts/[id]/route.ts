@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import { NextRequest, NextResponse } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
@@ -24,17 +24,17 @@ export async function GET(request: NextRequest, { params }: Props) {
             email: true,
             image: true,
             bio: true,
-          }
+          },
         },
         categories: {
           include: {
-            category: true
-          }
+            category: true,
+          },
         },
         tags: {
           include: {
-            tag: true
-          }
+            tag: true,
+          },
         },
         comments: {
           where: { approved: true },
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest, { params }: Props) {
                 id: true,
                 name: true,
                 image: true,
-              }
+              },
             },
             replies: {
               include: {
@@ -53,32 +53,29 @@ export async function GET(request: NextRequest, { params }: Props) {
                     id: true,
                     name: true,
                     image: true,
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
-          orderBy: { createdAt: 'desc' }
+          orderBy: { createdAt: 'desc' },
         },
         _count: {
           select: {
-            comments: true
-          }
-        }
-      }
+            comments: true,
+          },
+        },
+      },
     })
 
     if (!post) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
     // Increment view count
     await prisma.post.update({
       where: { id },
-      data: { views: { increment: 1 } }
+      data: { views: { increment: 1 } },
     })
 
     return NextResponse.json(post)
@@ -95,7 +92,7 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function PUT(request: NextRequest, { params }: Props) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -109,24 +106,21 @@ export async function PUT(request: NextRequest, { params }: Props) {
     // Check if post exists and user has permission
     const existingPost = await prisma.post.findUnique({
       where: { id },
-      select: { authorId: true }
+      select: { authorId: true },
     })
 
     if (!existingPost) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    if (existingPost.authorId !== session.user.id && session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Permission denied' },
-        { status: 403 }
-      )
+    if (
+      existingPost.authorId !== session.user.id &&
+      session.user.role !== 'ADMIN'
+    ) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
-    const updateData: any = { ...body }
+    const updateData: Record<string, unknown> = { ...body }
 
     // Update slug if title changed
     if (body.title) {
@@ -144,7 +138,11 @@ export async function PUT(request: NextRequest, { params }: Props) {
     }
 
     // Set published date if publishing for the first time
-    if (body.published && !existingPost.publishedAt) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (
+      (body.published && !('publishedAt' in existingPost)) ||
+      (existingPost as any).publishedAt === null
+    ) {
       updateData.publishedAt = new Date()
     }
 
@@ -158,19 +156,19 @@ export async function PUT(request: NextRequest, { params }: Props) {
             name: true,
             email: true,
             image: true,
-          }
+          },
         },
         categories: {
           include: {
-            category: true
-          }
+            category: true,
+          },
         },
         tags: {
           include: {
-            tag: true
-          }
-        }
-      }
+            tag: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json(post)
@@ -187,7 +185,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
 export async function DELETE(request: NextRequest, { params }: Props) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -200,25 +198,22 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     // Check if post exists and user has permission
     const existingPost = await prisma.post.findUnique({
       where: { id },
-      select: { authorId: true }
+      select: { authorId: true },
     })
 
     if (!existingPost) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     }
 
-    if (existingPost.authorId !== session.user.id && session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Permission denied' },
-        { status: 403 }
-      )
+    if (
+      existingPost.authorId !== session.user.id &&
+      session.user.role !== 'ADMIN'
+    ) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
 
     await prisma.post.delete({
-      where: { id }
+      where: { id },
     })
 
     return NextResponse.json({ message: 'Post deleted successfully' })
