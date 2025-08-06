@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
-import { authOptions } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 interface Props {
@@ -91,7 +90,7 @@ export async function GET(request: NextRequest, { params }: Props) {
 // PUT /api/posts/[id] - Update a post
 export async function PUT(request: NextRequest, { params }: Props) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -184,7 +183,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
 // DELETE /api/posts/[id] - Delete a post
 export async function DELETE(request: NextRequest, { params }: Props) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return NextResponse.json(

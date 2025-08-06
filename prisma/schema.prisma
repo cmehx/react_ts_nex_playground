@@ -46,13 +46,37 @@ model User {
   password      String?
   role          Role      @default(USER)
   bio           String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  
+  // Security & 2FA
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean   @default(false)
+  backupCodes         String[]
+  lastPasswordChange  DateTime?
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  
+  // RGPD Compliance
+  gdprConsent         Boolean   @default(false)
+  gdprConsentDate     DateTime?
+  marketingConsent    Boolean   @default(false)
+  dataRetentionDate   DateTime?
+  deletionRequested   Boolean   @default(false)
+  deletionRequestDate DateTime?
+  
+  // Audit trail
+  lastLoginAt         DateTime?
+  lastLoginIp         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  posts    Post[]
-  comments Comment[]
+  // Relations
+  accounts             Account[]
+  sessions             Session[]
+  posts                Post[]
+  comments             Comment[]
+  dataExportRequests   DataExportRequest[]
+  dataDeletionRequests DataDeletionRequest[]
+  consentLogs          ConsentLog[]
 }
 
 model VerificationToken {
@@ -160,4 +184,86 @@ enum Role {
   USER
   ADMIN
   MODERATOR
+}
+
+// Security & Audit Models
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  ip        String
+  userAgent String?
+  success   Boolean
+  createdAt DateTime @default(now())
+  
+  @@index([email, createdAt])
+  @@index([ip, createdAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expires   DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([email])
+  @@index([expires])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expires   DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([email])
+  @@index([expires])
+}
+
+// RGPD Compliance Models
+model DataExportRequest {
+  id          String   @id @default(cuid())
+  userId      String
+  status      String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  downloadUrl String?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([status])
+}
+
+model DataDeletionRequest {
+  id         String   @id @default(cuid())
+  userId     String
+  reason     String?
+  status     String   @default("PENDING") // PENDING, APPROVED, REJECTED, COMPLETED
+  scheduledFor DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([status])
+}
+
+model ConsentLog {
+  id           String   @id @default(cuid())
+  userId       String
+  consentType  String   // GDPR, MARKETING, COOKIES, etc.
+  granted      Boolean
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, consentType])
+  @@index([createdAt])
 }

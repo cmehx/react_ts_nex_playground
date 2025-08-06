@@ -1,1 +1,5 @@
-npx lint-staged
+# HUSKY ROLLBACK DISABLED per user request
+# Original: npx lint-staged
+# Disabled to prevent automatic code changes that rollback manual fixes
+echo "⚠️  Husky pre-commit hook DISABLED to prevent code rollbacks"
+echo "✅ Run 'npm run lint:fix' manually if needed"
