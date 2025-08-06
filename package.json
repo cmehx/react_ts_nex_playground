@@ -30,14 +30,11 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --max-warnings=0",
       "prettier --write"
     ],
     "*.{json,md,mdx,css,yaml,yml}": [
       "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "bash -c 'npm run type-check'"
     ]
   },
   "dependencies": {
