@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Heart } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -16,8 +15,9 @@ export default function Footer() {
               Modern Blog
             </h3>
             <p className="text-sm text-gray-600 mb-4 max-w-md">
-              Un blog moderne et professionnel créé avec Next.js, TypeScript et Tailwind CSS. 
-              Partagez vos histoires et connectez-vous avec des lecteurs du monde entier.
+              Un blog moderne et professionnel créé avec Next.js, TypeScript et
+              Tailwind CSS. Partagez vos histoires et connectez-vous avec des
+              lecteurs du monde entier.
             </p>
           </div>
 
@@ -26,22 +26,34 @@ export default function Footer() {
             <h4 className="font-medium text-lg mb-2">Explorer</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/posts" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/posts"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Tous les articles
                 </Link>
               </li>
               <li>
-                <Link href="/categories" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/categories"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Catégories
                 </Link>
               </li>
               <li>
-                <Link href="/authors" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/authors"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Auteurs
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/about"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   À propos
                 </Link>
               </li>
@@ -53,22 +65,34 @@ export default function Footer() {
             <h4 className="font-medium text-lg mb-2">Compte</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/auth/signin" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/auth/signin"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Se connecter
                 </Link>
               </li>
               <li>
-                <Link href="/auth/signup" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/auth/signup"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   S&apos;inscrire
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/dashboard"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/profile" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link
+                  href="/profile"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
                   Profil
                 </Link>
               </li>
@@ -83,13 +107,22 @@ export default function Footer() {
             © {currentYear} Modern Blog. Tous droits réservés.
           </p>
           <div className="flex space-x-6">
-            <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <a
+              href="#"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
               GitHub
             </a>
-            <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <a
+              href="#"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
               Twitter
             </a>
-            <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <a
+              href="#"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
               LinkedIn
             </a>
           </div>
