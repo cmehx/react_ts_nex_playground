@@ -138,7 +138,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
     }
 
     // Set published date if publishing for the first time
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     if (
       (body.published && !('publishedAt' in existingPost)) ||
       (existingPost as any).publishedAt === null
