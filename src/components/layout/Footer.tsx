@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Github, Twitter, Linkedin, Mail, Heart } from 'lucide-react'
+import { Heart } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -59,7 +59,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/auth/signup" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  S'inscrire
+                  S&apos;inscrire
                 </Link>
               </li>
               <li>

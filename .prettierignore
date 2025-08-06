@@ -5,6 +5,7 @@ node_modules/
 
 # Testing
 coverage/
+jest-results.json
 
 # Next.js
 .next/
@@ -14,9 +15,43 @@ out/
 build/
 dist/
 
+# Database
+prisma/migrations/
+
+# Generated files
+*.generated.ts
+*.generated.js
+
 # Misc
 .DS_Store
 *.tsbuildinfo
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache
+.cache/
+*.cache
+
+# Storybook
+storybook-static/
+
+# Docker
+Dockerfile
+docker-compose*.yml
 
 # Debug
 npm-debug.log*

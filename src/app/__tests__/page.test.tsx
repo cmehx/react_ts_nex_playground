@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react'
 import { SessionProvider } from 'next-auth/react'
 import Home from '../page'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Mock next-auth
 jest.mock('next-auth/react', () => ({
@@ -43,7 +43,7 @@ describe('Home Page', () => {
     // Check if the main heading is rendered
     expect(screen.getByText('Bienvenue sur')).toBeInTheDocument()
     expect(screen.getByText('Modern Blog')).toBeInTheDocument()
-    
+
     // Check if the featured articles section is rendered
     expect(screen.getByText('Articles en vedette')).toBeInTheDocument()
   })
